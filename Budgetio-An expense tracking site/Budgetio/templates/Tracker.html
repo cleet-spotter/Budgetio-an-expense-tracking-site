@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+{% block content %}
+<form class="form2" id="main_tracker" method="post">
+    {{form.hidden_tag()}}
+    <div class="main_tracker">
+        <p class="sign" align="center">Expense Tracker</p>
+            {% if form.month.errors %}
+            {{ form.month(class="un ", id="month", placeholder="Select Month")}}
+            <div class="alerts">
+                {% for error in form.month.errors %}
+               <p align="center"><span class="errors">{{ error }}</span></p>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.month(class="un ", placeholder="Select Month")}}
+            {% endif %}
+
+            {% if form.type.errors %}
+            {{ form.month(class="un ",id="type", placeholder="Select Type")}}
+            <div class="alerts">
+                {% for error in form.type.errors %}
+               <p align="center"><span class="errors">{{ error }}</span></p>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.type(class="un ", placeholder="Select Type")}}
+            {% endif %}
+
+            {% if form.description.errors %}
+            {{ form.description(class="pass",id="desc", placeholder="Description")}}
+            <div class="alerts">
+                {% for error in form.description.errors %}
+                <p align="center"><span class="errors">{{ error }}</span></p>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.description(class="pass", placeholder="Description")}}
+            {% endif %}
+
+            {% if form.expense.errors %}
+            {{ form.expense(class="pass",id="amount", placeholder="Enter Amount")}}
+            <div class="alerts">
+                {% for error in form.expense.errors %}
+                <p align="center"><span class="errors">{{ error }}</span></p>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.expense(class="pass", placeholder="Enter Amount")}}
+            {% endif %}
+
+            {{form.submit(class="submit")}}
+
+            <br>
+    </div>
+</form>
+<form class="form2" method="post">
+<div class="main_tracker_history">
+    <div class="hist_head">
+        <p class="sign" align="center" id="hist_head">History</p>
+        {{ form_f.month(id="dropdown", placeholder="Select Month")}}{{form_f.submit1(id='search')}}
+    </div>
+        {% for data in datab.query.filter_by(owner=current_user,month=month_f).all() %}
+    {% if data.type == 'Income' %}
+    <div class="ex_entry">
+        <div class="entry">
+            <p align="left" style="color:rgb(0, 255, 0)" id="des">[ {{ data.description }} ]--->[ {{ data.expense }} ]</p>
+        </div>
+        <div class="butns">
+            <button class="btn" id="del_but"><a href="/entries/delete/{{ data.id }}">del</a></button>
+            <button class="btn" id="edit_but"><a href="/entries/edit/{{ data.id }}">edit</a></button>
+        </div>
+    </div>
+    {% endif %}
+    {% if data.type == 'Expenditure' %}
+    <div class="ex_entry">
+        <div class="entry">
+            <p align="left" style="color:orange" id="des">[{{ data.description }}]--->[{{ data.expense}}]</p>
+        </div>
+        <div class="butns">
+            <button class="btn" id="del_but"><a href="/entries/delete/{{ data.id }}">del</a></button>
+            <button class="btn" id="edit_but"><a href="/entries/edit/{{ data.id }}">edit</a></button>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+</form>
+<div class="main_tracker_summary">
+    <p class="summary_title" align="center">Monthly Summary</p>
+    {% set score = [] %}
+    {% for data in datab.query.filter_by(owner=current_user,month=month_f).all() %}
+        {% if score.append(data.expense) %}{% endif %}
+    {% endfor %}
+    {% if score | count==0 %}
+    <p align="center" class="sign">{{month_f}} Bugdet = <span class="summary_title">₹0</span> </p>
+    {% endif %}
+    {% if score | count>0 %}
+
+    <p align="center"  class="summary_">{{month_f}} Balance = <span class="summary_title">₹{{ score | sum }}</span> </p>
+    <p align="center" class="summary_">{{month_f}} Total Transaction = <span class="summary_title">{{ score | count }}</span> </p>
+    {% endif %}
+
+    {% set score = [] %}
+    {% for data in datab.query.filter_by(owner=current_user).all() %}
+        {% if score.append(data.expense) %}{% endif %}
+    {% endfor %}
+    {% if score | count==0 %}
+    <br>
+    {% endif %}
+    {% if score | count>0 %}
+    <p class="summary_title" align="center">Yearly Summary</p>
+    <p align="center" class="summary_">Total Transactions this year = <span class="summary_title">{{ score | count }}</span></p>
+    <p align="center" class="summary_">Yearly Average Bugdet = <span class="summary_title">₹{{'%0.2f'| format(score | sum / score | count / 12 |float)}}</span></p>
+    <p align="center" class="summary_">Total Balance = <span class="summary_title">₹{{ score | sum }}</span></p>
+    {% endif %}
+</div>
+{% endblock %}

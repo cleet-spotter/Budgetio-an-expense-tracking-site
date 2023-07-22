@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<form class="form3" method="post" action="">
+    {{form.hidden_tag()}}
+    <div class="main_tracker" id="editor">
+        <p class="sign" align="center">Update Entry</p>
+            {% if form.month.errors %}
+            {{ form.month(class="un ", placeholder="Select Month")}}
+            <div class="alerts">
+                {% for error in form.month.errors %}
+               <p align="center"><span class="errors">{{ error }}</span></p>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.month(class="un ", placeholder="Select Month")}}
+            {% endif %}
+
+            {% if form.type.errors %}
+                {{ form.type(class="un ", placeholder="Select Month")}}
+                <div class="alerts">
+                    {% for error in form.type.errors %}
+                   <p align="center"><span class="errors">{{ error }}</span></p>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.type(class="un ", placeholder="Select Month")}}
+                {% endif %}
+
+            {% if form.description.errors %}
+            {{ form.description(class="pass", placeholder="Description")}}
+            <div class="alerts">
+                {% for error in form.description.errors %}
+                <p align="center"><span class="errors">{{ error }}</span></p>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.description(class="pass", placeholder="Description")}}
+            {% endif %}
+
+            {% if form.expense.errors %}
+            {{ form.expense(class="pass", placeholder="Enter Amount")}}
+            <div class="alerts">
+                {% for error in form.expense.errors %}
+                <p align="center"><span class="errors">{{ error }}</span></p>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.expense(class="pass", placeholder="Enter Amount")}}
+            {% endif %}
+
+            {{form.update(class="submit")}}
+
+            <br>
+    </div>
+</form>
+{% endblock %}

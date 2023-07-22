@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{url_for('static', filename = 'blog_page.css')}}">
+<h1 class="blog_text">User Posts</h1>
+    <img src="{{url_for('static', filename='profile pics/'+ post.author.image_file)}}" height="75" width="75" id = "Small_profile_pic">
+    <div class="heading_post">
+        {{ post.title }}<br>
+    </div>
+    {{ post.author.name }}<br>
+    <div class="post_date">
+        {{ post.date_posted.strftime('%d-%m-%Y') }}<br><br>
+    </div>
+    <div class="blog_post">
+        {{ post.content }}<br/><br/>
+    </div>
+    {% if post.author == current_user %}
+    <div class="post_buttons">
+        <button class="btn" id="btn1"><a href="/posts/{{post.id}}/update">Update</a></button>
+        <button class="btn" id="btn1"><a href="/posts/{{post.id}}/delete">Delete</a></button>
+    </div>
+    {% endif %}
+
+{% endblock %}

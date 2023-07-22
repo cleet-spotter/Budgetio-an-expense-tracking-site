@@ -1,0 +1,38 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<form class="form3" method="post" action="">
+    {{form.hidden_tag()}}
+    <div class="main_profile" id="editor">
+        <p id="profile_name" align="center">{{legend}}</p>
+
+            {% if form.headline.errors %}
+            {{ form.headline(class="un ", placeholder="Username")}}
+            <div class="alerts">
+                {% for error in form.headline.errors %}
+               <p align="center"><span class="errors">{{ error }}</span></p>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.headline(class="un ", placeholder="Headline")}}
+            {% endif %}
+
+            {% if form.description.errors %}
+            {{ form.email(class="email", placeholder="Description")}}
+            <div class="alerts">
+                {% for error in form.description.errors %}
+                <p align="center"><span class="errors">{{ error }}</span></p>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.description(class="email", placeholder="Description")}}
+            {% endif %}
+
+            {% if request.path == current_url %}
+            {{form.edit(class="submit", placeholder="EDIT")}}
+            {% else %}
+            {{form.publish(class="submit", placeholder="PUBLISH")}}
+            {% endif %}
+    </div>
+</form>
+{% endblock %}

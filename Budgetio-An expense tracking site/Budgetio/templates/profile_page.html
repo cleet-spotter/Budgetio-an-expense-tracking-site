@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="profile_container">
+    <div id="user_buttons1">
+        <button id="btn_chart"><a href="/chart"> View charts</a></button>
+        <button id="btn_chart"><a href="/write_post"> Write a post</a></button>
+    </div>
+    <div class="main_profile">
+        <form class="form1" method="post" action="" enctype="multipart/form-data">
+            {{form.hidden_tag()}}
+
+            <img src="{{ image_file }}" height="250" width="250" id = "profile_pic">
+            <p id="profile_name" align="center">{{current_user.username}}'s profile</p>
+                {% if form.username.errors %}
+                {{ form.username(class="un ", placeholder="Username")}}
+                <div class="alerts">
+                    {% for error in form.username.errors %}
+                   <p align="center"><span class="errors">{{ error }}</span></p>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.username(class="un ", placeholder="Username")}}
+                {% endif %}
+
+                {% if form.email.errors %}
+                {{ form.email(class="email", placeholder="Email")}}
+                <div class="alerts">
+                    {% for error in form.email.errors %}
+                    <p align="center"><span class="errors">{{ error }}</span></p>
+                    {% endfor %}
+                </div>
+                {% else %}
+                {{ form.email(class="email", placeholder="Email")}}
+                {% endif %}
+                <p id="profile_name" align="center">{{ form.pic.label(id="profile_name") }}</p>
+                {{ form.pic(class="email") }}
+                {% if form.pic.errors %}
+                {% for error in form.pic.errors %}
+                    <p align="center"><span class="errors">{{ error }}</span></p>
+                    {% endfor %}
+                {% endif %}
+
+                {{form.update(class="submit")}}
+            <p class="forgot" align="center"> Thank You for using Budgetio. </p>
+        </form>
+    </div>
+    <div id="user_buttons2">
+        <button id="btn_chart"><a href="/all_your_posts">All your posts</a></button>
+        <button id="btn_chart"><a href="/killme">Delete my data</a></button>
+    </div>
+</div>
+{% endblock %}

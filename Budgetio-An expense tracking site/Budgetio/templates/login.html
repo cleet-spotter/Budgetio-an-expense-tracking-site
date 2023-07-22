@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+{% block content %}
+<form class="form1" id="login_block" method="post" action="">
+    {{form.hidden_tag()}}
+    <div class="main">
+        <p class="sign" align="center">Login</p>
+            {% if form.username.errors %}
+            {{ form.username(class="un ", placeholder="Username")}}
+            <div class="alerts">
+                {% for error in form.username.errors %}
+               <p align="center"><span class="errors">{{ error }}</span></p>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.username(class="pass", placeholder="Username")}}
+            {% endif %}
+
+            {% if form.password.errors %}
+            {{ form.password(class="pass", placeholder="Password")}}
+            <div class="alerts">
+                {% for error in form.password.errors %}
+                <p align="center"><span class="errors">{{ error }}</span></p>
+                {% endfor %}
+            </div>
+            {% else %}
+            {{ form.password(class="pass", placeholder="Password")}}
+            {% endif %}
+            <p align="center">
+            {{form.remember.label(class="remember")}}
+            {{ form.remember()}}
+            </p>
+            {{form.submit(class="submit")}}
+            <p class="forgot" align="center"> New User? <a class="login-link" href="/r">Click here</a> to Signup. </p>
+            <br>
+    </div>
+</form>
+{% endblock %}

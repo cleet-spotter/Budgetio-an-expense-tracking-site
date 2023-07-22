@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block content %}
+<link rel="stylesheet" href="{{url_for('static', filename = 'blog_page.css')}}">
+<h1 class="blog_text">User Posts</h1>
+{% for post in posts.items %}
+<div class="blog_contain">
+    <div class="blog">
+        <div class="blog_content">
+            <div class="img">
+                <img src="{{url_for('static', filename='profile pics/'+ post.author.image_file)}}" height="80" width="80" id = "Small_profile_pic">
+            </div>
+            <div class="heading">
+                <a href="/posts/{{post.id}}" class="heading">{{ post.title }}</a><br/>
+            </div>
+        </div>
+        {{ post.author.name }}<br/>
+        <div class="post_date">
+            {{ post.date_posted.strftime('%d-%m-%Y') }}<br>
+        </div>
+        <div class="blog_post">
+            {{ post.content }}
+        </div>
+        <br>
+    </div>
+</div>
+{% endfor %}
+
+
+
+<!-- Pagination Links-->
+<div class="text-right">
+    <a href="{{ url_for('blogpage', page=posts.prev_num) }}"
+       class="btn btn-outline-dark
+       {% if posts.page == 1 %}disabled{% endif %}">
+        &laquo;
+    </a>
+<!-- Loop through the number of pages to display a link for each-->
+    {% for page_num in posts.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+{% if page_num %}
+<!-- Check for the active page and set the link to "Active"-->
+            {% if posts.page == page_num %}
+            <a href="{{ url_for('blogpage', page=page_num) }}"
+               class="border_page">
+                {{ page_num }}
+            </a>
+            {% else %}
+            <a href="{{ url_for('blogpage', page=page_num) }}"
+               class="borer_page">
+                {{ page_num }}
+            </a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+    <a href="{{ url_for('blogpage', page=posts.next_num) }}"
+       class="btn btn-outline-dark
+       {% if posts.page == posts.pages %}disabled{% endif %}">
+        &raquo;
+    </a>
+</div>
+<p class="text-right">
+   Showing page {{ posts.page }} of {{ posts.pages }}
+</p>
+
+{% endblock %}

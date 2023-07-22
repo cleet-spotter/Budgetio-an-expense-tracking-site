@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@300&display=swap');
+    </style>
+    <link rel="stylesheet" href="{{url_for('static', filename ='Styling.css')}}">
+    <link rel=icon href="{{url_for('static', filename ='Logo.png')}}">
+    <title>Budgetio</title>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <img src="{{url_for('static', filename ='Logo.png')}}" class="logo" >
+        <nav>
+          <ul>
+            <li><a href="/home">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/articles">Articles</a></li>
+            <li><a href="/blogpage">Blogs</a></li>
+            <li><a href="/contact">Contact us</a></li>
+          </ul>
+        </nav>
+		{% if current_user.is_authenticated %}
+          <img src="{{url_for('static', filename='profile pics/'+ current_user.image_file)}}" height="75" width="75" id = "Small_profile_pic">
+          <button class="btn" id="btn1"><a href="/user_profile">Profile</a></button>
+          <button class="btn" id="btn1"><a href="/t">Expense Tracker</a></button>
+          <button class="btn" id="btn1"><a href="/logout">logout</a></button>
+
+      </div>
+		{% else %}
+        <button class="btn" id="btn1"><a href="/l">log in</a></button>
+        <button class="btn" id="btn2"><a href="/r">Sign up</a></button>
+      </div>
+		{% endif %}
+
+	  {% if request.path==current_url or request.path==alt_current_url %}
+        {% if not current_user.is_authenticated %}
+          <div class="content" id="save">
+            <div class="text">
+              <h1>
+                save money by tracking expenses! <br />
+                <span>Join us</span>
+              </h1>
+              <p>
+                Our objective is to create a sense
+                <br />of financial discipline among masses by simplifying
+                financial management. <br />Your first step towards money management.
+              </p>
+              <button class="btn" id="btn3"><a href="/about">Know more</a></button>
+            </div>
+          </div>
+          <div class="landing_img">
+            <img src="{{url_for('static', filename='Landing_Page.png')}}" id = "landing_img">
+          </div>
+        {% endif %}
+	  {% endif %}
+    {% if request.path==current_url or request.path==alt_current_url %}
+        {% if current_user.is_authenticated %}
+          <div class="content" id="save1">
+            <div class="text" id="user_count" >
+              <h1>
+                Total number of users:<br/>
+                 {% set users = [] %}
+                  {% for data in datab.query.all() %}
+                      {% if users.append(data) %}
+                      {% endif %}
+                  {% endfor %}
+                <span>{{ users | count }}</span>
+              </h1>
+                <h1>
+                Total number of posts:<br/>
+                 {% set posts = [] %}
+                  {% for data in datac.query.all() %}
+                      {% if posts.append(data) %}
+                      {% endif %}
+                  {% endfor %}
+                <span>{{ posts | count }}</span>
+                </h1>
+              </div>
+              <div class="text" id="save_mon">
+
+                {% set income_array = [] %}
+                  {% for data in datad.query.filter_by(type='Income').all() %}
+                      {% if income_array.append(data.expense) %}
+                      {% endif %}
+                  {% endfor %}
+
+                  {% set expenditure_array = [] %}
+                  {% for data in datad.query.filter_by(type='Expenditure').all() %}
+                      {% if expenditure_array.append(data.expense) %}
+                      {% endif %}
+                      {% endfor %}
+                <h1>
+                You saved:
+                <span>₹{{expenditure_array | sum + income_array | sum }}</span>
+              </h1>
+            </div>
+          </div>
+        {% endif %}
+	  {% endif %}
+
+	  <div>
+		{% with messages = get_flashed_messages() %}
+		{%if messages%}
+		{%for message in messages%}
+		<span class="errors">
+		{{message}}
+		</span>
+		{% endfor%}
+		{% endif %}
+		{% endwith%}
+
+		{% block content %}
+
+		{% endblock %}
+	</div>
+    </div>
+    <!--<a href="https://www.freepik.com/vectors/income-tax" id="attribution">Income tax vector created by vectorjuice - www.freepik.com</a>-->
+  </body>
+</html>
+

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<form class="form3" id="delete_me" method="post" action="">
+    {{form.hidden_tag()}}
+    <div class="main_profile" id="del_me">
+        <p id="del_head" align="center">Delete my data from this site!</p>
+        <div class="checklist">
+            <p>
+                {{form.delete_entries.label(class="remember")}}
+                {{ form.delete_entries()}}
+            </p>
+            <br>
+            <p>
+                {{form.delete_posts.label(class="remember")}}
+                {{ form.delete_posts()}}
+            </p>
+            <br>
+            <p>
+                {{form.delete_account.label(class="remember")}}
+                {{ form.delete_account()}}
+            </p>
+            <br>
+        </div>
+        <br>
+        {{form.kill_me(class="submit")}}
+    </div>
+</form>
+{% endblock %}

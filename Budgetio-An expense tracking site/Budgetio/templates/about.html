@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+<body>
+    <div class="content" id="save">
+      <div class="text">
+        <h1>What is Budgetio? <br /></h1>
+        <p>
+          Budgetio is a full-featured investment manager. It tracks and
+          categorizes all the expenses you make. Budgetio is great for making
+          expense reports on the go indicating your monthly cash flow and
+          breaking down your monthly expenses. It also has an article section
+          where one can read about wealth management, personal finance and
+          more. The free financial dashboard provides budgeting and a cash
+          flow analyzer.
+        </p>
+        <br />
+        <a class="join" href="/r"><span>Join us!!</span></a>
+      </div>
+    </div>
+    <div class="landing_img">
+      <img src="{{url_for('static', filename='about.png')}}" id = "about_img">
+    </div>
+  </div>
+</body>
+{% endblock %}

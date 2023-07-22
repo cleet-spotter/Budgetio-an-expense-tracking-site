@@ -1,0 +1,155 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<link rel="stylesheet" href="{{url_for('static', filename ='Styling.css')}}">
+
+<div class="chart_container">
+  <div class="chart_display">
+    <canvas id="Y_Chart"></canvas>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% set income_array = [] %}
+      {% for data in datab.query.filter_by(owner=current_user,type='Income').all() %}
+          {% if income_array.append(data.expense) %}
+          {% endif %}
+      {% endfor %}
+
+      {% set expenditure_array = [] %}
+      {% for data in datab.query.filter_by(owner=current_user,type='Expenditure').all() %}
+          {% if expenditure_array.append(data.expense) %}
+          {% endif %}
+      {% endfor %}
+  <script>
+
+  const data = {
+    labels: [
+      'Expenditure',
+      'Savings',
+    ],
+    datasets: [{
+      label: 'Expenditure vs Savings',
+      data: [{{ expenditure_array | sum * -1 }}, {{expenditure_array | sum + income_array | sum }}],
+      borderColor : '#21325E',
+      color : '#000000',
+      backgroundColor: [
+        'rgb(240, 240, 240)',
+        'rgb(241, 208, 10)',
+      ],
+
+      hoverOffset: 8
+    }]
+  };
+
+
+    const config = {
+      type: 'doughnut',
+      data: data,
+      options: {
+        layout: {
+          padding: {
+            left: '5'
+          }
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'right',
+                labels: {
+                    color: 'rgb(255,255,255)',
+                    font: {
+                      size: '18'
+                    },
+                    textAlign: 'start'
+                  }
+              }
+          }
+      }
+    };
+  </script>
+
+  <script>
+    const Y_Chart = new Chart(
+      document.getElementById('Y_Chart'),
+      config
+    );
+  </script>
+<!----->
+{% set income_array_month = [] %}
+      {% for data in datab.query.filter_by(owner=current_user,type='Income',month=month_f).all() %}
+          {% if income_array_month.append(data.expense) %}
+          {%endif%}
+      {% endfor %}
+
+      {% set expenditure_array_month = [] %}
+      {% for data in datab.query.filter_by(owner=current_user,type='Expenditure',month=month_f).all() %}
+          {% if expenditure_array_month.append(data.expense) %}
+          {%endif%}
+      {% endfor %}
+
+  <div class="chart_display" id="m_chart">
+    <canvas id="M_Chart"></canvas>
+    <form class="hist" method="post">
+      {{ form_f.month(id="dropdown", placeholder="Select Month")}}{{form_f.submit1(id='search')}}
+    </form>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+
+  const data_2 = {
+    labels: [
+      'Expenditure',
+      'Savings',
+    ],
+    datasets: [{
+      data: [{{ expenditure_array_month | sum * -1 }}, {{ expenditure_array_month | sum + income_array_month | sum }}],
+      borderColor : '#21325E',
+      color : '#000000',
+      backgroundColor: [
+        'rgb(240, 240, 240)',
+        'rgb(241, 208, 10)',
+      ],
+
+      hoverOffset: 8
+    }]
+  };
+
+
+    const config_2 = {
+      type: 'doughnut',
+      data: data_2,
+      options: {
+        layout: {
+          padding: {
+            bottom: '48',
+            left: '5'
+          }
+        },
+        plugins: {
+            legend: {
+                display: true,
+                position: 'right',
+                labels: {
+                    color: 'rgb(255,255,255)',
+                    font: {
+                      size: '18'
+                    },
+                    textAlign: 'start'
+                  }
+              }
+          }
+      }
+    };
+  </script>
+
+  <script>
+    const M_Chart = new Chart(
+      document.getElementById('M_Chart'),
+      config_2
+    );
+  </script>
+</div>
+<span class="chart_title">
+  <h1 class="chart_title">Yearly Expenditure-Saving Chart</h1>
+  <h1 class="chart_title">{{month_f}} Expenditure-Saving Chart</h1>
+</span>
+{% endblock %}
